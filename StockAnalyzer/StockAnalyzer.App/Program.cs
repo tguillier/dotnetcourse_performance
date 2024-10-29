@@ -1,4 +1,8 @@
 ﻿using StockAnalyzer.Processor;
+using System.Diagnostics;
+
+var watch = new Stopwatch();
+watch.Start();
 
 var result = string.Empty;
 
@@ -20,5 +24,7 @@ foreach (var stock in processor.Stocks)
 File.WriteAllText("Result.txt", $"{result}");
 
 Console.WriteLine("Completed..");
+
+Console.WriteLine($"Elapsed time: {watch.ElapsedMilliseconds}ms");
 
 Console.ReadLine();
