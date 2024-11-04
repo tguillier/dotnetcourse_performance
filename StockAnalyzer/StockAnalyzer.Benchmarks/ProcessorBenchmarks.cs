@@ -1,14 +1,13 @@
 ﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Jobs;
 
 namespace StockAnalyzer.Benchmarks
 {
-    [SimpleJob]
+    [SimpleJob(RuntimeMoniker.Net80, baseline: true)]
+    [SimpleJob(RuntimeMoniker.Net472)]
     [MemoryDiagnoser]
     public class ProcessorBenchmarks
     {
-        [GlobalSetup]
-        public void Setup() { }
-
         [Benchmark]
         public List<string> Processor()
         {
