@@ -18,7 +18,9 @@ while (true)
     }
 
     watch.Restart();
-    RunProcessor();
+    //RunProcessor();
+
+    Task.Run(Deadlock);
 
     Console.WriteLine($"Elapsed time: {watch.ElapsedMilliseconds}ms{Environment.NewLine}");
 }
@@ -42,4 +44,14 @@ void RunProcessor()
     }
 
     File.WriteAllText("Result.txt", $"{result}");
+}
+
+void Deadlock()
+{
+    Task t2 = null!;
+
+    // DO NOT DO THIS...
+    // Never use Wait or Result on Tasks!
+    var t1 = Task.Run(RunProcessor).ContinueWith(t => t2.Wait());
+    t2 = Task.Run(t1.Wait);
 }
