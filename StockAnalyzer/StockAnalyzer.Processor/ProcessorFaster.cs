@@ -1,8 +1,11 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 
 namespace StockAnalyzer.Processor;
 
-public class Processor(string dataPath = "Data")
+public class ProcessorFaster(string dataPath = "Data")
 {
     public Dictionary<string, Stock> Stocks { get; set; } = new Dictionary<string, Stock>();
 
@@ -13,8 +16,10 @@ public class Processor(string dataPath = "Data")
             var content = File.ReadAllText(file);
             var lines = content.Split('\n');
 
-            foreach (var line in lines[1..]) // Skip the first line
+            //foreach (var line in lines[1..]) // Skip the first line
+            for (int i = 1; i < lines.Length; i++)
             {
+                var line = lines[i];
                 var csv = line.Split(',');
 
                 if (csv.Length < 8)
@@ -58,6 +63,7 @@ public class Processor(string dataPath = "Data")
 
         return (min, max, average);
     }
+
 
     public decimal Min(string ticker)
     {
