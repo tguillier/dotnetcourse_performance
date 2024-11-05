@@ -20,25 +20,48 @@ public class ProcessorFaster(string dataPath = "Data")
             for (int i = 1; i < lines.Length; i++)
             {
                 var line = lines[i];
-                var csv = line.Split(',');
+                //var csv = line.Split(',');
 
-                if (csv.Length < 8)
+                //if (csv.Length < 8)
+                //{
+                //    continue;
+                //}
+
+                int startIndex = 0;
+                int endIndex = 0;
+                string name = string.Empty;
+                string value = string.Empty;
+
+                // We know the CSV contains 8 columns.
+                for (int column = 0; column < 8; column++)
                 {
-                    continue;
+                    // Find the end of the current column.
+                    endIndex = line.IndexOf(',', startIndex);
+
+                    if (column == 0) // The stock name
+                    {
+                        name = line[startIndex..endIndex];
+                    }
+                    else if (column == 7)
+                    {
+                        value = line[startIndex..endIndex];
+                    }
+
+                    startIndex = endIndex + 1;
                 }
 
                 var trade = new Trade(
-                    DateTime.Parse(csv[1], CultureInfo.InvariantCulture),
-                    decimal.Parse(csv[6], CultureInfo.InvariantCulture),
-                    decimal.Parse(csv[7], CultureInfo.InvariantCulture),
-                    decimal.Parse(csv[8], CultureInfo.InvariantCulture));
+                    DateTime.MinValue,
+                    decimal.MinValue,
+                    decimal.Parse(value, CultureInfo.InvariantCulture),
+                    decimal.MinValue);
 
-                if (!Stocks.ContainsKey(csv[0]))
+                if (!Stocks.ContainsKey(name))
                 {
-                    Stocks[csv[0]] = new Stock(csv[0]);
+                    Stocks[name] = new Stock(name);
                 }
 
-                Stocks[csv[0]].Trades.Add(trade);
+                Stocks[name].Trades.Add(trade);
             }
         }
     }
