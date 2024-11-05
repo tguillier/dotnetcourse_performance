@@ -18,9 +18,9 @@ while (true)
     }
 
     watch.Restart();
-    //RunProcessor();
+    RunProcessor();
 
-    Task.Run(Deadlock);
+    //Task.Run(Deadlock);
 
     Console.WriteLine($"Elapsed time: {watch.ElapsedMilliseconds}ms{Environment.NewLine}");
 }
