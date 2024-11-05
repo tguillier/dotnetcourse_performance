@@ -1,28 +1,46 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
 
 namespace StockAnalyzer.Benchmarks
 {
-    [SimpleJob(RuntimeMoniker.Net80, baseline: true)]
-    [SimpleJob(RuntimeMoniker.Net472)]
+    [SimpleJob]
     [MemoryDiagnoser]
     public class ProcessorBenchmarks
     {
+        Processor.Processor _processor;
+
+        [GlobalSetup]
+        public void Setup()
+        {
+            _processor = new Processor.Processor();
+            _processor.Initialize();
+        }
+
         [Benchmark]
         public List<string> Processor()
         {
             var result = new List<string>();
 
-            var processor = new Processor.Processor("D:\\source\\repos\\Perf_Exercices\\StockAnalyzer\\StockAnalyzer.Processor\\Data");
-
-            processor.Initialize();
-
-            foreach (var stock in processor.Stocks)
+            foreach (var stock in _processor.Stocks)
             {
-                var min = processor.Min(stock.Key);
-                var max = processor.Max(stock.Key);
-                var average = processor.Average(stock.Key);
+                var min = _processor.Min(stock.Key);
+                var max = _processor.Max(stock.Key);
+                var average = _processor.Average(stock.Key);
 
+                result.Add($"{min} {max} {average}");
+            }
+
+            return result;
+        }
+
+
+        [Benchmark]
+        public List<string> ProcessorFaster()
+        {
+            var result = new List<string>();
+
+            foreach (var stock in _processor.Stocks)
+            {
+                (decimal min, decimal max, decimal average) = _processor.GetReport(stock.Key);
                 result.Add($"{min} {max} {average}");
             }
 

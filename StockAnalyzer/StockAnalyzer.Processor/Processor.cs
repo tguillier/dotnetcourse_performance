@@ -38,6 +38,27 @@ public class Processor(string dataPath)
         }
     }
 
+    public (decimal min, decimal max, decimal average) GetReport(string ticker)
+    {
+        var min = decimal.MaxValue;
+        var max = decimal.MinValue;
+        var total = 0M;
+        var count = 0;
+
+        foreach (var trade in Stocks[ticker].Trades)
+        {
+            if (trade.Change < min) min = trade.Change;
+            if (trade.Change > max) max = trade.Change;
+
+            total += trade.Change;
+            count++;
+        }
+
+        var average = total / count;
+
+        return (min, max, average);
+    }
+
     public decimal Min(string ticker)
     {
         decimal min = decimal.MaxValue;
