@@ -44,13 +44,42 @@ namespace StockAnalyzer.Benchmarks
             return result;
         }
 
-
         [Benchmark]
         public List<string> ProcessorFaster()
         {
             var result = new List<string>();
             var processor = new Processor.ProcessorFaster();
             processor.Initialize();
+
+            foreach (var stock in processor.Stocks)
+            {
+                result.Add($"{stock.Value.Min} {stock.Value.Max} {stock.Value.Average}");
+            }
+
+            return result;
+        }
+
+        [Benchmark]
+        public async Task<List<string>> ProcessorFasterAsync()
+        {
+            var result = new List<string>();
+            var processor = new Processor.ProcessorFaster();
+            await processor.InitializeAsync();
+
+            foreach (var stock in processor.Stocks)
+            {
+                result.Add($"{stock.Value.Min} {stock.Value.Max} {stock.Value.Average}");
+            }
+
+            return result;
+        }
+
+        [Benchmark]
+        public async Task<List<string>> ProcessorFasterAsync_V2()
+        {
+            var result = new List<string>();
+            var processor = new Processor.ProcessorFaster();
+            await processor.InitializeAsync_V2();
 
             foreach (var stock in processor.Stocks)
             {
