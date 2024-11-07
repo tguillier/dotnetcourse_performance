@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Running;
-using StockAnalyzer.Benchmarks;
 
-BenchmarkRunner.Run<ProcessorBenchmarks>();
+//BenchmarkRunner.Run<ProcessorBenchmarks>();
+
+BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run();

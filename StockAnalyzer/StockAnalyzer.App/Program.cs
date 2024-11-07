@@ -27,7 +27,7 @@ while (true)
 
 void RunProcessor()
 {
-    var processor = new ProcessorFaster();
+    var processor = new Processor();
     var result = string.Empty;
 
     Console.WriteLine("Starting...");
